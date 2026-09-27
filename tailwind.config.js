@@ -9,6 +9,35 @@ export default {
       colors: {
         base: '#000000',
         canvas: '#050505',
+        black: '#000000',
+        pureblack: '#000000',
+        gray: {
+          50: '#F9F9F9',
+          100: '#F3F3F3',
+          200: '#E5E5E5',
+          300: '#D4D4D4',
+          400: '#A3A3A3',
+          500: '#737373',
+          600: '#525252',
+          700: '#333333',
+          800: '#171717',
+          900: '#000000',
+          950: '#000000',
+        },
+        slate: {
+          50: '#F9F9F9',
+          100: '#F3F3F3',
+          200: '#E5E5E5',
+          300: '#D4D4D4',
+          400: '#A3A3A3',
+          500: '#737373',
+          600: '#525252',
+          700: '#333333',
+          800: '#171717',
+          850: '#111111',
+          900: '#000000',
+          950: '#000000',
+        },
         surface: {
           50: '#1D1D1D',
           100: '#161616',
@@ -35,7 +64,19 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['Geist', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
+        sans: [
+          '-apple-system',
+          'BlinkMacSystemFont',
+          '"SF Pro Text"',
+          '"SF Pro Display"',
+          '"SF Pro"',
+          '"Inter"',
+          '"Roboto"',
+          '"Helvetica Neue"',
+          'Helvetica',
+          'Arial',
+          'sans-serif'
+        ],
         mono: ['"JetBrains Mono"', 'SFMono-Regular', 'Menlo', 'monospace'],
       },
       letterSpacing: {

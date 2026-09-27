@@ -14,23 +14,52 @@
   --color-accent-foreground: #000000;
 }
 
-/* Custom dark scrollbar */
+/* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #000000;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #242424;
+  background: #333333;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #333333;
+  background: #444444;
+}
+
+/* Light / Admin scrollbars */
+.light-scroll::-webkit-scrollbar-track,
+.admin-scope ::-webkit-scrollbar-track,
+.admin-scope::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.light-scroll::-webkit-scrollbar-thumb,
+.admin-scope ::-webkit-scrollbar-thumb,
+.admin-scope::-webkit-scrollbar-thumb {
+  background: #E5E7EB;
+  border-radius: 9999px;
+}
+
+.light-scroll::-webkit-scrollbar-thumb:hover,
+.admin-scope ::-webkit-scrollbar-thumb:hover,
+.admin-scope::-webkit-scrollbar-thumb:hover {
+  background: #D1D5DB;
+}
+
+/* Hide scrollbar utility */
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
+}
+.no-scrollbar {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
 }
 
 /* Subtle background grid pattern */

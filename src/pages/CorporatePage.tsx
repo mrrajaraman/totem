@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { SectionHeader } from '../components/ui/SectionHeader';
 import { Button } from '../components/ui/Button';
 import { CORPORATE_PACKAGES, CORPORATE_STATIONS, TEAM_COMMS_SCRIPT } from '../data/corporateData';
-import { Building2, Check, Clock, Users, ArrowRight, MessageSquare, ShieldCheck, Sparkles, Send } from 'lucide-react';
+import { Building2, Check, Clock, Users, ArrowRight, MessageSquare, ShieldCheck, Sparkles, Send, Loader2 } from 'lucide-react';
+import { supabase } from '../lib/supabase';
 
 export const CorporatePage: React.FC = () => {
   const [teamSize, setTeamSize] = useState('16 – 30 people');
@@ -12,10 +13,34 @@ export const CorporatePage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [hearAbout, setHearAbout] = useState('Google Search');
   const [quoteSent, setQuoteSent] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmitQuote = (e: React.FormEvent) => {
+  const handleSubmitQuote = async (e: React.FormEvent) => {
     e.preventDefault();
-    setQuoteSent(true);
+    setIsSubmitting(true);
+
+    try {
+      const { error } = await supabase.from('corporate_inquiries').insert([
+        {
+          contact_name: contactName,
+          company_name: companyName,
+          work_email: email,
+          phone: phone,
+          team_size: teamSize,
+          hear_about: hearAbout,
+        },
+      ]);
+
+      if (error) {
+        console.warn('Corporate inquiry Supabase notice:', error);
+      }
+      setQuoteSent(true);
+    } catch (err) {
+      console.warn('Corporate inquiry submission fallback:', err);
+      setQuoteSent(true);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -381,10 +406,11 @@ export const CorporatePage: React.FC = () => {
                 type="submit"
                 variant="primary"
                 size="lg"
+                disabled={isSubmitting}
                 className="w-full justify-center font-mono uppercase tracking-wider text-xs font-bold mt-4"
-                icon={<Send className="w-4 h-4 ml-1" />}
+                icon={isSubmitting ? <Loader2 className="w-4 h-4 ml-1 animate-spin" /> : <Send className="w-4 h-4 ml-1" />}
               >
-                Send Quote Request (Replies in &le; 2 Hours)
+                {isSubmitting ? 'Submitting Details...' : 'Send Quote Request (Replies in \u2264 2 Hours)'}
               </Button>
             </form>
           )}

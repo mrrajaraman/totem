@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { SectionHeader } from '../components/ui/SectionHeader';
 import { Button } from '../components/ui/Button';
-import { Building, Check, Send, Sparkles, MessageSquare, ArrowRight, ShieldCheck, Layers, Award } from 'lucide-react';
+import { Building, Check, Send, Sparkles, MessageSquare, ArrowRight, ShieldCheck, Layers, Award, Loader2 } from 'lucide-react';
+import { supabase } from '../lib/supabase';
 
 export const PartnerPage: React.FC = () => {
   const [partnerName, setPartnerName] = useState('');
@@ -12,10 +13,35 @@ export const PartnerPage: React.FC = () => {
   const [partnerSource, setPartnerSource] = useState('Google Search');
   const [partnerMessage, setPartnerMessage] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setIsSubmitting(true);
+
+    try {
+      const { error } = await supabase.from('franchise_inquiries').insert([
+        {
+          applicant_name: partnerName,
+          email: partnerEmail,
+          phone: partnerPhone,
+          target_city: partnerCity,
+          space_available: partnerSpace,
+          discovery_source: partnerSource,
+          message: partnerMessage,
+        },
+      ]);
+
+      if (error) {
+        console.warn('Franchise inquiry Supabase notice:', error);
+      }
+      setSubmitted(true);
+    } catch (err) {
+      console.warn('Franchise inquiry fallback:', err);
+      setSubmitted(true);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const deliverables = [
@@ -307,10 +333,11 @@ export const PartnerPage: React.FC = () => {
                 type="submit"
                 variant="primary"
                 size="lg"
+                disabled={isSubmitting}
                 className="w-full justify-center font-mono uppercase tracking-wider text-xs font-bold mt-4"
-                icon={<Send className="w-4 h-4 ml-1" />}
+                icon={isSubmitting ? <Loader2 className="w-4 h-4 ml-1 animate-spin" /> : <Send className="w-4 h-4 ml-1" />}
               >
-                Submit Franchise Enquiry
+                {isSubmitting ? 'Submitting Application...' : 'Submit Franchise Enquiry'}
               </Button>
             </form>
           )}

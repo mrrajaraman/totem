@@ -15,6 +15,16 @@ import { BlogPostPage } from './pages/BlogPostPage';
 import { LocationPage } from './pages/LocationPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 
+// Admin Imports
+import { AdminAuthProvider } from './context/AdminAuthContext';
+import { AdminProtectedRoute } from './components/admin/AdminProtectedRoute';
+import { AdminLayout } from './components/admin/AdminLayout';
+import { AdminLoginPage } from './pages/admin/AdminLoginPage';
+import { AdminDashboardPage } from './pages/admin/AdminDashboardPage';
+import { AdminBookingsPage } from './pages/admin/AdminBookingsPage';
+import { AdminCorporatePage } from './pages/admin/AdminCorporatePage';
+import { AdminFranchisePage } from './pages/admin/AdminFranchisePage';
+
 // Scroll to top helper on page change - instant top reset before paint
 const ScrollToTop: React.FC = () => {
   const { pathname, search } = useLocation();
@@ -32,29 +42,78 @@ const ScrollToTop: React.FC = () => {
   return null;
 };
 
+// Wrapper for public guest-facing pages inside consumer Layout
+const PublicRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  return <Layout>{children}</Layout>;
+};
+
 export const App: React.FC = () => {
   return (
-    <Router>
-      <ScrollToTop />
-      <Layout>
+    <AdminAuthProvider>
+      <Router>
+        <ScrollToTop />
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/worlds" element={<WorldsPage />} />
-          <Route path="/worlds/:slug" element={<WorldDetailPage />} />
-          <Route path="/booking" element={<BookingPage />} />
-          <Route path="/pricing" element={<PricingPage />} />
-          <Route path="/corporate" element={<CorporatePage />} />
-          <Route path="/birthday" element={<BirthdayPage />} />
-          <Route path="/partner-with-us" element={<PartnerPage />} />
-          <Route path="/partner" element={<PartnerPage />} />
-          <Route path="/faq" element={<FAQPage />} />
-          <Route path="/blog" element={<BlogPage />} />
-          <Route path="/blog/:slug" element={<BlogPostPage />} />
-          <Route path="/location" element={<LocationPage />} />
-          <Route path="*" element={<NotFoundPage />} />
+          {/* Admin Command Center Routes */}
+          <Route path="/admin/login" element={<AdminLoginPage />} />
+          <Route
+            path="/admin"
+            element={
+              <AdminProtectedRoute>
+                <AdminLayout>
+                  <AdminDashboardPage />
+                </AdminLayout>
+              </AdminProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/bookings"
+            element={
+              <AdminProtectedRoute>
+                <AdminLayout>
+                  <AdminBookingsPage />
+                </AdminLayout>
+              </AdminProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/corporate"
+            element={
+              <AdminProtectedRoute>
+                <AdminLayout>
+                  <AdminCorporatePage />
+                </AdminLayout>
+              </AdminProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/franchise"
+            element={
+              <AdminProtectedRoute>
+                <AdminLayout>
+                  <AdminFranchisePage />
+                </AdminLayout>
+              </AdminProtectedRoute>
+            }
+          />
+
+          {/* Public Guest Experience Routes */}
+          <Route path="/" element={<PublicRoute><HomePage /></PublicRoute>} />
+          <Route path="/worlds" element={<PublicRoute><WorldsPage /></PublicRoute>} />
+          <Route path="/worlds/:slug" element={<PublicRoute><WorldDetailPage /></PublicRoute>} />
+          <Route path="/booking" element={<PublicRoute><BookingPage /></PublicRoute>} />
+          <Route path="/pricing" element={<PublicRoute><PricingPage /></PublicRoute>} />
+          <Route path="/corporate" element={<PublicRoute><CorporatePage /></PublicRoute>} />
+          <Route path="/birthday" element={<PublicRoute><BirthdayPage /></PublicRoute>} />
+          <Route path="/partner-with-us" element={<PublicRoute><PartnerPage /></PublicRoute>} />
+          <Route path="/partner" element={<PublicRoute><PartnerPage /></PublicRoute>} />
+          <Route path="/faq" element={<PublicRoute><FAQPage /></PublicRoute>} />
+          <Route path="/blog" element={<PublicRoute><BlogPage /></PublicRoute>} />
+          <Route path="/blog/:slug" element={<PublicRoute><BlogPostPage /></PublicRoute>} />
+          <Route path="/location" element={<PublicRoute><LocationPage /></PublicRoute>} />
+          <Route path="*" element={<PublicRoute><NotFoundPage /></PublicRoute>} />
         </Routes>
-      </Layout>
-    </Router>
+      </Router>
+    </AdminAuthProvider>
   );
 };
 

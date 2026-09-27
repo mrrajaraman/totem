@@ -163,6 +163,7 @@ export const Footer: React.FC = () => {
             <Link to="/faq" className="hover:text-white transition-colors">Safety &amp; Rules</Link>
             <Link to="/pricing" className="hover:text-white transition-colors">Booking Policies</Link>
             <Link to="/partner-with-us" className="hover:text-white transition-colors">Franchise Terms</Link>
+            <Link to="/admin" className="text-zinc-500 hover:text-[#39FF14] transition-colors">HQ Command</Link>
           </div>
         </div>
       </div>
